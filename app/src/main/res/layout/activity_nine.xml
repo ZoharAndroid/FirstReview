@@ -3,4 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:layout_margin="5dip"
+        android:text="HttpURLConnection"
+        android:id="@+id/btn_send_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+    <Button
+        android:layout_margin="5dip"
+        android:text="okHttp"
+        android:id="@+id/btn_send_request_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_margin="5dip"
+        android:text="Pull解析Xml"
+        android:id="@+id/btn_xml_pull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
