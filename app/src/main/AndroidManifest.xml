@@ -28,6 +28,8 @@
         <activity android:name=".XmlPullActivity"/>
 
         <activity android:name=".TenActivity"/>
+        <activity android:name=".ServiceBasicActivity"/>
+        <service android:name=".MyService"/>
     </application>
 
 </manifest>
