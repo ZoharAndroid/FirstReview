@@ -29,6 +29,10 @@ import java.util.List;
 
 import javax.xml.parsers.SAXParserFactory;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 public class XmlPullActivity extends AppCompatActivity {
 
     private static final String TAG = "XmlPullActivity";
@@ -43,6 +47,8 @@ public class XmlPullActivity extends AppCompatActivity {
     private Button mBtnSax;
     private Button mBtnJson;
     private Button mBtnGson;
+    private Button mBtnHttp;
+    private Button mBtnOkHttp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +59,46 @@ public class XmlPullActivity extends AppCompatActivity {
         mBtnSax = findViewById(R.id.btn_send_sax);
         mBtnJson = findViewById(R.id.btn_send_json);
         mBtnGson = findViewById(R.id.btn_send_gson);
+        mBtnHttp = findViewById(R.id.btn_send_http_callback);
+        mBtnOkHttp = findViewById(R.id.btn_send_okhttp_callback);
+
+        mBtnHttp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HttpUtils.sendHttpRequest("http://10.0.2.2:8080/get_data.xml", new HttpCallbackListener() {
+                    @Override
+                    public void onFinished(String response) {
+                        //mTvXml.setText(response);
+                        Log.d(TAG,response);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
+
+
+        mBtnOkHttp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HttpUtils.sendOkHttpRequest("http://10.0.2.2:8080/get_data.xml", new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+
+                        Log.d(TAG,response.body().string());
+                    }
+                });
+            }
+        });
+
 
         mBtnGson.setOnClickListener(new View.OnClickListener() {
             @Override

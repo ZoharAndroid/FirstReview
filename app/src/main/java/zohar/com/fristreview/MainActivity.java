@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mBtnEight;
     private Button mBtnNine;
+    private Button mBtnTen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mBtnEight = findViewById(R.id.btn_eight);
         mBtnNine = findViewById(R.id.btn_nine);
+        mBtnTen = findViewById(R.id.btn_ten);
 
         mBtnEight.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,5 +36,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mBtnTen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,TenActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 }

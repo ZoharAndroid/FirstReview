@@ -28,6 +28,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:text="Http回调使用"
+        android:id="@+id/btn_send_http_callback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="OkHttp回调"
+        android:id="@+id/btn_send_okhttp_callback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/tv_xml_pull"
         android:layout_width="match_parent"

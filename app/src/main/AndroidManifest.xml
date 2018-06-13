@@ -21,10 +21,13 @@
         </activity>
 
         <activity android:name=".EightActivity"/>
+
         <activity android:name=".NineActivity"/>
         <activity android:name=".HttpURLActivity"/>
         <activity android:name=".OkHttpActivity"/>
         <activity android:name=".XmlPullActivity"/>
+
+        <activity android:name=".TenActivity"/>
     </application>
 
 </manifest>
