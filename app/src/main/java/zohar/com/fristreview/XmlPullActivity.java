@@ -8,6 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -18,14 +25,24 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
+import javax.xml.parsers.SAXParserFactory;
 
 public class XmlPullActivity extends AppCompatActivity {
 
     private static final String TAG = "XmlPullActivity";
 
+    private static final int XML = 1;
+    private static final int SAX = 2;
+    private static final int JSON = 3;
+    private static final int GSON = 4;
+
     private TextView mTvXml;
     private Button mBtnSend;
+    private Button mBtnSax;
+    private Button mBtnJson;
+    private Button mBtnGson;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,11 +50,35 @@ public class XmlPullActivity extends AppCompatActivity {
         setContentView(R.layout.activity_xml);
         mTvXml = findViewById(R.id.tv_xml_pull);
         mBtnSend = findViewById(R.id.btn_send_xml);
+        mBtnSax = findViewById(R.id.btn_send_sax);
+        mBtnJson = findViewById(R.id.btn_send_json);
+        mBtnGson = findViewById(R.id.btn_send_gson);
+
+        mBtnGson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendRequestHttpUrl(4);
+            }
+        });
+
+        mBtnJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendRequestHttpUrl(3);
+            }
+        });
+
+        mBtnSax.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendRequestHttpUrl(2);
+            }
+        });
 
         mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendRequestHttpUrl();
+                sendRequestHttpUrl(1);
             }
         });
 
@@ -45,14 +86,22 @@ public class XmlPullActivity extends AppCompatActivity {
     }
 
 
-    private void sendRequestHttpUrl() {
+    private void sendRequestHttpUrl(final int method) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 BufferedReader reader = null;
                 HttpURLConnection connection = null;
+                URL url = null;
                 try {
-                    URL url = new URL("http://10.0.2.2:8080/get_data.xml");
+                    if (method == 1 || method == 2) {
+                        url = new URL("http://10.0.2.2:8080/get_data.xml");
+                    }
+
+                    if (method == 3 || method == 4) {
+                        url = new URL("http://10.0.2.2:8080/get_data.json");
+                    }
+
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setReadTimeout(8000);
@@ -66,7 +115,26 @@ public class XmlPullActivity extends AppCompatActivity {
                     }
                     String responseData = builder.toString();
                     Log.d(TAG, responseData);
-                    parseXmlWithPull(responseData);
+                    switch (method) {
+                        case 1:
+                            //xml解析
+                            parseXmlWithPull(responseData);
+                            break;
+                        case 2:
+                            //SAX解析
+                            parseXmlWithSax(responseData);
+                            break;
+                        case 3:
+                            parseJsonWithJSONObject(responseData);
+                            break;
+                        case 4:
+                            parseJsonWithGson(responseData);
+                            break;
+                        default:
+                            break;
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -89,6 +157,63 @@ public class XmlPullActivity extends AppCompatActivity {
     }
 
 
+    private void parseJsonWithGson(String jsonData) {
+        final StringBuilder content = new StringBuilder();
+        Gson gson = new Gson();
+        List<App> apps = gson.fromJson(jsonData, new TypeToken<List<App>>() {
+        }.getType());
+        for (App app : apps) {
+            String id = app.getId();
+            String name = app.getName();
+            String version = app.getVersion();
+            content.append("id:" + id + " name: " + name + "version: " + version + "\n");
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvXml.setText(content.toString());
+            }
+        });
+    }
+
+
+    private void parseJsonWithJSONObject(String jsonData) {
+        final StringBuilder content = new StringBuilder();
+        try {
+            JSONArray array = new JSONArray(jsonData);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+                final String id = jsonObject.getString("id");
+                final String name = jsonObject.getString("name");
+                final String version = jsonObject.getString("version");
+                content.append("id:" + id + " name: " + name + "version: " + version + "\n");
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTvXml.setText(content.toString());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void parseXmlWithSax(String xmlData) {
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            XMLReader xmlReader = factory.newSAXParser().getXMLReader();
+            xmlReader.setContentHandler(new ContentHandler());
+            xmlReader.parse(new InputSource(new StringReader(xmlData)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     private void parseXmlWithPull(String xmlData) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -102,19 +227,19 @@ public class XmlPullActivity extends AppCompatActivity {
                 String node = pullParser.getName();
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
-                        if ("id".equals(node)){
+                        if ("id".equals(node)) {
                             id = pullParser.nextText();
-                        }else if("name".equals(node)){
+                        } else if ("name".equals(node)) {
                             name = pullParser.nextText();
-                        }else  if ("version".equals(node)){
+                        } else if ("version".equals(node)) {
                             version = pullParser.getText();
                         }
                         break;
                     case XmlPullParser.END_TAG:
-                        if ("app".equals(node)){
-                            Log.d(TAG,"id is "+ id);
-                            Log.d(TAG,"name is "+ name);
-                            Log.d(TAG,"version is "+ version);
+                        if ("app".equals(node)) {
+                            Log.d(TAG, "id is " + id);
+                            Log.d(TAG, "name is " + name);
+                            Log.d(TAG, "version is " + version);
                         }
                         break;
                     default:
