@@ -33,6 +33,11 @@
         <service android:name=".MyIntentService"/>
         <activity android:name=".DownloadActivity"/>
         <service android:name=".DownloadService"/>
+
+        <activity android:name=".TwelveActivity"
+            android:label="测试标题栏">
+
+        </activity>
     </application>
 
 </manifest>

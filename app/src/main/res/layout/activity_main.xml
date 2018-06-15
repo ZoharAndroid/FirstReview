@@ -7,27 +7,35 @@
     tools:context=".MainActivity">
 
     <Button
-        android:textSize="18sp"
+        android:id="@+id/btn_eight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
         android:text="第八章 多媒体"
-        android:layout_margin="10dip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_eight" />
+        android:textSize="18sp" />
 
     <Button
-        android:textSize="18sp"
+        android:id="@+id/btn_nine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
         android:text="第九章 网络"
-        android:layout_margin="10dip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_nine" />
+        android:textSize="18sp" />
 
     <Button
-        android:textSize="18sp"
-        android:text="第十章 服务"
-        android:layout_margin="10dip"
+        android:id="@+id/btn_ten"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_ten" />
+        android:layout_margin="10dip"
+        android:text="第十章 服务"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_twelve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="第十二章 UI体验"
+        android:textSize="18sp" />
 
 </LinearLayout>
