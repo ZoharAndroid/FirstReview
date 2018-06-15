@@ -30,6 +30,9 @@
         <activity android:name=".TenActivity"/>
         <activity android:name=".ServiceBasicActivity"/>
         <service android:name=".MyService"/>
+        <service android:name=".MyIntentService"/>
+        <activity android:name=".DownloadActivity"/>
+        <service android:name=".DownloadService"/>
     </application>
 
 </manifest>

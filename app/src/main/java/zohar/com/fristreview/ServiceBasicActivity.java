@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 public class ServiceBasicActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "ServiceBasicActivity";
+    
     private Button mBtnStartService;
     private Button mBtnStopService;
     private Button mBtnStartBindService;
     private Button mBtnStopBindService;
+    private Button mBtnStartIntentService;
 
     private MyService.DownloadBinder binder;
 
@@ -41,30 +45,39 @@ public class ServiceBasicActivity extends AppCompatActivity implements View.OnCl
         mBtnStopService = findViewById(R.id.btn_stop_service);
         mBtnStartBindService = findViewById(R.id.btn_start_bind_service);
         mBtnStopBindService = findViewById(R.id.btn_stop_bind_service);
+        mBtnStartIntentService = findViewById(R.id.btn_intent_service);
 
         mBtnStopService.setOnClickListener(this);
         mBtnStartService.setOnClickListener(this);
         mBtnStopBindService.setOnClickListener(this);
         mBtnStartBindService.setOnClickListener(this);
+        mBtnStartIntentService.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_start_service:
-                Intent intent = new Intent(ServiceBasicActivity.this,MyService.class);
+                Intent intent = new Intent(ServiceBasicActivity.this, MyService.class);
                 startService(intent);
                 break;
             case R.id.btn_stop_service:
-                Intent stopintent = new Intent(ServiceBasicActivity.this,MyService.class);
+                Intent stopintent = new Intent(ServiceBasicActivity.this, MyService.class);
                 stopService(stopintent);
                 break;
             case R.id.btn_start_bind_service:
-                Intent bindService = new Intent(ServiceBasicActivity.this,MyService.class);
-                bindService(bindService,connection,BIND_AUTO_CREATE);
+                Intent bindService = new Intent(ServiceBasicActivity.this, MyService.class);
+                bindService(bindService, connection, BIND_AUTO_CREATE);
                 break;
             case R.id.btn_stop_bind_service:
-                unbindService(connection);
+                if (connection != null) {
+                    unbindService(connection);
+                }
+                break;
+            case R.id.btn_intent_service:
+                Log.d(TAG, "onClick: " + Thread.currentThread().getId());
+                Intent intentService = new Intent(ServiceBasicActivity.this, MyIntentService.class);
+                startService(intentService);
                 break;
             default:
                 break;
