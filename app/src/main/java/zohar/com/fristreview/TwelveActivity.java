@@ -1,51 +1,37 @@
 package zohar.com.fristreview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
 
-public class TwelveActivity extends AppCompatActivity {
+public class TwelveActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "TwelveActivity";
 
-    private Toolbar mTbBar;
+    private Button mBtnDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_twelve);
-        mTbBar = findViewById(R.id.tb_action_bar);
-        setSupportActionBar(mTbBar);
+        mBtnDrawerLayout = findViewById(R.id.btn_drawer_layout);
+
+        mBtnDrawerLayout.setOnClickListener(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.backup:
-                Toast.makeText(TwelveActivity.this,"备份",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.share:
-                Toast.makeText(TwelveActivity.this,"share",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.love:
-                Toast.makeText(TwelveActivity.this,"love",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.setting:
-                Toast.makeText(TwelveActivity.this,"setting",Toast.LENGTH_SHORT).show();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_drawer_layout:
+                Intent intent = new Intent(TwelveActivity.this,DrawerLayoutActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
         }
-        return super.onOptionsItemSelected(item);
     }
+
 }

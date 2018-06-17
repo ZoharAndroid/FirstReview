@@ -34,10 +34,10 @@
         <activity android:name=".DownloadActivity"/>
         <service android:name=".DownloadService"/>
 
-        <activity android:name=".TwelveActivity"
-            android:label="测试标题栏">
+        <activity android:name=".TwelveActivity">
 
         </activity>
+        <activity android:name=".DrawerLayoutActivity"/>
     </application>
 
 </manifest>
