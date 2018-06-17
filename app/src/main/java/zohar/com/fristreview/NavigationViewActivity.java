@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,6 +33,9 @@ public class NavigationViewActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private FloatingActionButton mFloationgButton;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipRefresh;
+
+    private FruitAdapter adapter;
 
     private Fruit[] fruits = {new Fruit("苹果",R.mipmap.apple),new Fruit("草莓",R.mipmap.strawberry),new Fruit("梨子",R.mipmap.pear),new Fruit("芒果",R.mipmap.mango)};
     private List<Fruit> listFrusts = new ArrayList<>();
@@ -45,6 +49,7 @@ public class NavigationViewActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.navigation_drawer_layout);
         mFloationgButton = findViewById(R.id.floating_button);
         mRecyclerView = findViewById(R.id.recycler_view_navigation);
+        mSwipRefresh = findViewById(R.id.swipe_refresh_layout_fruit);
 
         setSupportActionBar(mToolbar);
 
@@ -97,7 +102,16 @@ public class NavigationViewActivity extends AppCompatActivity {
         initFruits();
         GridLayoutManager manager = new GridLayoutManager(this,2);
         mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(new FruitAdapter(this,listFrusts));
+        adapter = new FruitAdapter(this,listFrusts);
+        mRecyclerView.setAdapter(adapter);
+
+        mSwipRefresh.setColorSchemeColors(getResources().getColor(R.color.colorPrimary),getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.colorPrimaryDark));
+        mSwipRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshFruit();
+            }
+        });
     }
 
     @Override
@@ -117,5 +131,26 @@ public class NavigationViewActivity extends AppCompatActivity {
             int index = random.nextInt(fruits.length);
             listFrusts.add(fruits[index]);
         }
+    }
+
+    private void refreshFruit(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initFruits();
+                        adapter.notifyDataSetChanged();
+                        mSwipRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
     }
 }

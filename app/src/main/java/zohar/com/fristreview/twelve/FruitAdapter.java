@@ -1,6 +1,7 @@
 package zohar.com.fristreview.twelve;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,7 +55,11 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Fruit fruit = mListFruit.get(holder.getAdapterPosition());
-                Toast.makeText(mContext,fruit.getName(),Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext,FruitActivity.class);
+                intent.putExtra("fruit_name",fruit.getName());
+                intent.putExtra("fruit_id",fruit.getImageId());
+                mContext.startActivity(intent);
+                //Toast.makeText(mContext,fruit.getName(),Toast.LENGTH_SHORT).show();
             }
         });
         return holder;

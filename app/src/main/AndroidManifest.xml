@@ -37,6 +37,7 @@
         <activity android:name=".TwelveActivity"/>
         <activity android:name=".DrawerLayoutActivity"/>
         <activity android:name=".NavigationViewActivity"/>
+        <activity android:name=".twelve.FruitActivity" android:theme="@style/FruitActivityTheme"/>
     </application>
 
 </manifest>

@@ -14,11 +14,11 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
-                app:layout_scrollFlags="scroll|enterAlways|snap"
                 android:id="@+id/tool_bar_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways|snap" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -29,12 +29,18 @@
             android:layout_margin="10dip"
             android:src="@mipmap/right" />
 
-        <android.support.v7.widget.RecyclerView
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/recycler_view_navigation"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_fruit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="wrap_content">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.design.widget.CoordinatorLayout>
 
 
