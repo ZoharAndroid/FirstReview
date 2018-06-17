@@ -34,10 +34,9 @@
         <activity android:name=".DownloadActivity"/>
         <service android:name=".DownloadService"/>
 
-        <activity android:name=".TwelveActivity">
-
-        </activity>
+        <activity android:name=".TwelveActivity"/>
         <activity android:name=".DrawerLayoutActivity"/>
+        <activity android:name=".NavigationViewActivity"/>
     </application>
 
 </manifest>
